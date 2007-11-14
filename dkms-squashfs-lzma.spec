@@ -1,14 +1,16 @@
-%define module squashfs
+%define bmodule squashfs
+%define module %{bmodule}-lzma
 %define name dkms-%{module}
 %define version 3.3
 %define kver 2.6.23
 %define release %mkrel 1
 
-Summary: Squashfs compressed read-only filesystem
+Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: %{module}%{version}.tgz
+Source0: %{bmodule}%{version}.tgz
+Source1: http://www.squashfs-lzma.org/dl/sqlzma%{version}.tar.bz2
 Patch0: squashfs3.3-2618.patch
 License: GPL
 Group: System/Kernel and hardware
@@ -19,20 +21,25 @@ Requires(preun): dkms
 
 %description
 Squashfs is a compressed read-only filesystem.
+This module is build with support for the LZMA compression algorithm.
 
 %prep
-%setup -q -n %{module}%{version}
+%setup -q -n %{bmodule}%{version} -a 1
 mkdir -p dkms
 pushd dkms
-patch -t < ../kernel-patches/linux-%{kver}/%{module}%{version}-patch || [ -f %{module}.h ]
-perl -pi -e 's,^#include <linux/(%{module}.*\.h)>$,#include "$1",' *.{c,h}
+patch -t < ../kernel-patches/linux-%{kver}/%{bmodule}%{version}-patch || [ -f %{bmodule}.h ]
+patch -t < ../sqlzma2k-%{version}.patch
+cp ../sqmagic.h ../sqlzma.h .
+perl -pi -e 's,^#include <linux/(%{bmodule}.*\.h)>$,#include "$1",' *.{c,h}
 popd
 %patch0 -p1 -b .2618
 
 cat > dkms/dkms.conf <<EOF
 PACKAGE_NAME=%{name}
 PACKAGE_VERSION=%{version}-%{release}
-DEST_MODULE_LOCATION[0]="/kernel/fs/%{module}"
+DEST_MODULE_LOCATION[0]="/kernel/fs/%{bmodule}"
+DEST_MODULE_NAME[0]="%{module}"
+BUILT_MODULE_NAME[0]="%{bmodule}"
 AUTOINSTALL=yes
 EOF
 
