@@ -2,7 +2,7 @@
 %define module %{bmodule}-lzma
 %define name dkms-%{module}
 %define version 3.3
-%define kver 2.6.23
+%define kver 2.6.24
 %define release %mkrel 1
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
