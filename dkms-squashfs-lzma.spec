@@ -2,6 +2,7 @@
 %define module %{bmodule}-lzma
 %define name dkms-%{module}
 %define version 3.3
+%define extraver -457-2
 %define kver 2.6.24
 %define release %mkrel 2
 
@@ -10,7 +11,7 @@ Name: %{name}
 Version: %{version}
 Release: %{release}
 Source0: %{bmodule}%{version}.tgz
-Source1: http://www.squashfs-lzma.org/dl/sqlzma%{version}.tar.bz2
+Source1: http://www.squashfs-lzma.org/dl/sqlzma%{version}%{extraver}.tar.bz2
 Patch0: squashfs3.3-2618.patch
 # http://sourceforge.net/tracker/index.php?func=detail&aid=1912192&group_id=63835&atid=505341
 Patch1: squashfs3.3-2625.patch
