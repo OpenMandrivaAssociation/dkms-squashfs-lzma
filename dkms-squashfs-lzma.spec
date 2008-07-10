@@ -4,7 +4,7 @@
 %define version 3.3
 %define extraver -457-2
 %define kver 2.6.24
-%define release %mkrel 3
+%define release %mkrel 4
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
@@ -28,6 +28,16 @@ Requires(preun): dkms
 %description
 Squashfs is a compressed read-only filesystem.
 This module is build with support for the LZMA compression algorithm.
+
+%package -n %{module}-kernel
+Summary:	Virtual package requiring squashfs-lzma modules
+Group:		System/Kernel and hardware
+Requires:	kmod(squashfs-lzma)
+Requires:	kmod(unlzma)
+
+%description -n %{module}-kernel
+This virtual package requires the squashfs-lzma modules and their
+dependencies.
 
 %prep
 %setup -q -n %{bmodule}%{version} -a 1
@@ -76,3 +86,5 @@ set -x
 %files
 %defattr(-,root,root)
 /usr/src/%{module}-%{version}-%{release}
+
+%files -n %{module}-kernel
