@@ -4,7 +4,7 @@
 %define version 3.3
 %define extraver -457-2
 %define kver 2.6.24
-%define release %mkrel 4
+%define release %mkrel 5
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
@@ -17,6 +17,8 @@ Patch0: squashfs3.3-2618.patch
 Patch1: squashfs3.3-2625.patch
 # http://sourceforge.net/mailarchive/forum.php?thread_name=Pine.LNX.4.64.0805291610580.3218%40vixen.sonytel.be&forum_name=squashfs-devel
 Patch2: squashfs3.3-f_pos.patch
+# http://squashfs.cvs.sourceforge.net/squashfs/squashfs/kernel/fs/squashfs/inode.c?r1=1.61&r2=1.61.4.1&view=patch&sortby=date&pathrev=devel-3_4
+Patch3: squashfs3.3-2627.patch
 License: GPL
 Group: System/Kernel and hardware
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -51,6 +53,7 @@ popd
 %patch0 -p1 -b .2618
 %patch1 -p1 -b .2625
 %patch2 -p1 -b .f_pos
+%patch3 -p1 -b .2627
 
 cat > dkms/dkms.conf <<EOF
 PACKAGE_NAME=%{name}
