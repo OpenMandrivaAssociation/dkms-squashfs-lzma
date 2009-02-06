@@ -19,6 +19,8 @@ Patch1: squashfs3.3-2625.patch
 Patch2: squashfs3.3-f_pos.patch
 # http://squashfs.cvs.sourceforge.net/squashfs/squashfs/kernel/fs/squashfs/inode.c?r1=1.61&r2=1.61.4.1&view=patch&sortby=date&pathrev=devel-3_4
 Patch3: squashfs3.3-2627.patch
+# http://kerneltrap.org/index.php?q=mailarchive/linux-kernel/2008/11/17/4175304/thread
+Patch4: squashfs-d_alloc_anon-removal.patch
 License: GPL
 Group: System/Kernel and hardware
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -54,6 +56,7 @@ popd
 %patch1 -p1 -b .2625
 %patch2 -p1 -b .f_pos
 %patch3 -p1 -b .2627
+%patch4 -p1 -b .d_anon
 
 cat > dkms/dkms.conf <<EOF
 PACKAGE_NAME=%{name}
