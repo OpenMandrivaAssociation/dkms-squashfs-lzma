@@ -4,7 +4,7 @@
 %define version 3.3
 %define extraver -457-2
 %define kver 2.6.24
-%define release %mkrel 5
+%define release %mkrel 6
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
