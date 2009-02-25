@@ -4,7 +4,7 @@
 %define version 3.3
 %define extraver -457-2
 %define kver 2.6.24
-%define release %mkrel 6
+%define release %mkrel 7
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
@@ -28,6 +28,7 @@ Url: http://squashfs.sourceforge.net/
 BuildArch: noarch
 Requires(post): dkms
 Requires(preun): dkms
+Requires(post): dkms-lzma
 
 %description
 Squashfs is a compressed read-only filesystem.
@@ -49,7 +50,6 @@ mkdir -p dkms
 pushd dkms
 patch -t < ../kernel-patches/linux-%{kver}/%{bmodule}%{version}-patch || [ -f %{bmodule}.h ]
 patch -t < ../sqlzma2k-%{version}.patch
-cp ../sqmagic.h ../sqlzma.h .
 perl -pi -e 's,^#include <linux/(%{bmodule}.*\.h)>$,#include "$1",' *.{c,h}
 popd
 %patch0 -p1 -b .2618
@@ -58,9 +58,22 @@ popd
 %patch3 -p1 -b .2627
 %patch4 -p1 -b .d_anon
 
+cp sqmagic.h dkms/
+
+cat > dkms/build.sh <<EOF
+cp -a /var/lib/dkms/lzma/*/source/ lzma
+cd lzma
+make -C "\$1" M=\`pwd\`
+cd ..
+cp lzma/sqlzma.h lzma/Module.symvers .
+make -C "\$1" M=\`pwd\`
+EOF
+chmod +x dkms/build.sh
+
 cat > dkms/dkms.conf <<EOF
 PACKAGE_NAME=%{name}
 PACKAGE_VERSION=%{version}-%{release}
+MAKE[0]="./build.sh \$kernel_source_dir"
 DEST_MODULE_LOCATION[0]="/kernel/fs/%{bmodule}"
 DEST_MODULE_NAME[0]="%{module}"
 BUILT_MODULE_NAME[0]="%{bmodule}"
