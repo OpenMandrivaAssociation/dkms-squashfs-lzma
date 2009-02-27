@@ -4,7 +4,7 @@
 %define version 3.3
 %define extraver -457-2
 %define kver 2.6.24
-%define release %mkrel 7
+%define release %mkrel 8
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
@@ -61,7 +61,7 @@ popd
 cp sqmagic.h dkms/
 
 cat > dkms/build.sh <<EOF
-cp -a /var/lib/dkms/lzma/*/source/ lzma
+cp -a /usr/src/lzma-*/ lzma
 cd lzma
 make -C "\$1" M=\`pwd\`
 cd ..
