@@ -4,7 +4,7 @@
 %define version 3.3
 %define extraver -457-2
 %define kver 2.6.24
-%define release %mkrel 8
+%define release %mkrel 9
 
 Summary: Squashfs compressed read-only filesystem (using LZMA)
 Name: %{name}
@@ -58,22 +58,11 @@ popd
 %patch3 -p1 -b .2627
 %patch4 -p1 -b .d_anon
 
-cp sqmagic.h dkms/
-
-cat > dkms/build.sh <<EOF
-cp -a /usr/src/lzma-*/ lzma
-cd lzma
-make -C "\$1" M=\`pwd\`
-cd ..
-cp lzma/sqlzma.h lzma/Module.symvers .
-make -C "\$1" M=\`pwd\`
-EOF
-chmod +x dkms/build.sh
+cp sqlzma.h sqmagic.h dkms/
 
 cat > dkms/dkms.conf <<EOF
 PACKAGE_NAME=%{name}
 PACKAGE_VERSION=%{version}-%{release}
-MAKE[0]="./build.sh \$kernel_source_dir"
 DEST_MODULE_LOCATION[0]="/kernel/fs/%{bmodule}"
 DEST_MODULE_NAME[0]="%{module}"
 BUILT_MODULE_NAME[0]="%{bmodule}"
