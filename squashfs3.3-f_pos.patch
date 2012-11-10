@@ -1,0 +1,12 @@
+diff -p -up squashfs3.3/dkms/inode.c.f_pos squashfs3.3/dkms/inode.c
+--- squashfs3.3/dkms/inode.c.f_pos	2008-07-07 21:32:10.000000000 +0200
++++ squashfs3.3/dkms/inode.c	2008-07-07 22:04:08.000000000 +0200
+@@ -1857,7 +1857,7 @@ static int get_dir_index_using_offset(st
+ 	TRACE("Entered get_dir_index_using_offset, i_count %d, f_pos %d\n",
+ 					i_count, (unsigned int) f_pos);
+ 
+-	f_pos =- 3;
++	f_pos -= 3;
+ 	if (f_pos == 0)
+ 		goto finish;
+ 

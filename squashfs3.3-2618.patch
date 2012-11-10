@@ -1,0 +1,38 @@
+diff -p -up squashfs3.3/dkms/inode.c.2618 squashfs3.3/dkms/inode.c
+--- squashfs3.3/dkms/inode.c.2618	2008-07-07 15:58:16.000000000 +0200
++++ squashfs3.3/dkms/inode.c	2008-07-07 15:59:06.000000000 +0200
+@@ -31,7 +31,10 @@
+ #include <linux/vfs.h>
+ #include <linux/vmalloc.h>
+ #include <linux/smp_lock.h>
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 23)
+ #include <linux/exportfs.h>
++#endif
+ 
+ #include "squashfs.h"
+ #include "sqlzma.h"
+@@ -2280,7 +2283,11 @@ static void squashfs_destroy_inode(struc
+ }
+ 
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24)
+ static void init_once(struct kmem_cache *cachep, void *foo)
++#else
++static void init_once(void * foo, struct kmem_cache * cachep, unsigned long flags)
++#endif
+ {
+ 	struct squashfs_inode_info *ei = foo;
+ 
+@@ -2292,7 +2299,11 @@ static int __init init_inodecache(void)
+ {
+ 	squashfs_inode_cachep = kmem_cache_create("squashfs_inode_cache",
+ 	    sizeof(struct squashfs_inode_info), 0,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 23)
+ 		SLAB_HWCACHE_ALIGN|SLAB_RECLAIM_ACCOUNT, init_once);
++#else
++		SLAB_HWCACHE_ALIGN|SLAB_RECLAIM_ACCOUNT, init_once, NULL);
++#endif
+ 	if (squashfs_inode_cachep == NULL)
+ 		return -ENOMEM;
+ 	return 0;
