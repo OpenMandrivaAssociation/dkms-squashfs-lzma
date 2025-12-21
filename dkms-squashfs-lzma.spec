@@ -30,6 +30,7 @@ Requires(post): dkms
 Requires(preun): dkms
 Requires(post): dkms-lzma
 
+BuildRequires:	make
 %description
 Squashfs is a compressed read-only filesystem.
 This module is build with support for the LZMA compression algorithm.
